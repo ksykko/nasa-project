@@ -24,7 +24,7 @@ function existsLaunchWithId(launchId) {
 }
 
 function addNewLaunch(launch) {
-    latestFlightNumber++
+    latestFlightNumbers++
     launches.set(
         latestFlightNumber,
         Object.assign(launch, {
