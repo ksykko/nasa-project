@@ -4,6 +4,11 @@ const { parse } = require('csv-parse')
 
 const planets = require('./planets.mongo')
 
+/*
+    Check if planet is habitable.
+    @param {Object} planet Planet to check.
+    @returns {Boolean} True if planet is habitable, false otherwise.
+*/
 function isHabitablePlanet(planet) {
     return (
         planet['koi_disposition'] === 'CONFIRMED' &&
@@ -13,6 +18,11 @@ function isHabitablePlanet(planet) {
     )
 }
 
+
+/*
+    Load planets data from CSV file.
+    @returns {Promise} Promise object.
+*/
 function loadPlanetsData() {
     return new Promise((resolve, reject) => {
         fs.createReadStream(
@@ -43,10 +53,21 @@ function loadPlanetsData() {
     })
 }
 
+/*
+    Get all planets from MongoDB.
+    @returns {Array} All planets.
+*/
 async function getAllPlanets() {
-    return await planets.find({})
+    return await planets.find({}, {
+        '_id': 0,
+        '__v': 0,
+    })
 }
 
+/*
+    Save planet to MongoDB.
+    @param {Object} planet Planet to save.
+*/
 async function savePlanet(planet) {
     try {
         await planets.updateOne({
