@@ -15,4 +15,5 @@ jobs:
                   node-version: '16'
             - run: npm install -g react-scripts
             - run: npm install
+            - run: npm install react/jsx-runtime
             - run: npm run build --prefix client
