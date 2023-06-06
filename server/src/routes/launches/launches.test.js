@@ -1,20 +1,22 @@
 const request = require('supertest') // import supertest (for testing HTTP requests/responses)
 const app = require('../../app')
 const { mongoConnect, mongoDisconnect } = require('../../services/mongo')
+const { loadPlanetsData } = require('../../models/planets.model')
 
 jest.setTimeout(30000)
 
 describe('Launches API', () => {
-    beforeAll(async() => {
+    beforeAll(async () => {
         await mongoConnect()
+        await loadPlanetsData()
     })
 
-    afterAll(async() => {
+    afterAll(async () => {
         await mongoDisconnect()
     })
 
     describe('Test GET /launches', () => {
-        test('It should respond with 200 success', async() => {
+        test('It should respond with 200 success', async () => {
             const response = await request(app)
                 .get('/v1/launches')
                 .expect('Content-Type', /json/)
@@ -43,7 +45,7 @@ describe('Launches API', () => {
             launchDate: 'Invalid Date',
         }
 
-        test('It should respond with 201 created', async() => {
+        test('It should respond with 201 created', async () => {
             const response = await request(app)
                 .post('/v1/launches')
                 .send(completeLaunchData)
@@ -63,7 +65,7 @@ describe('Launches API', () => {
             })
         })
 
-        test('It should catch missing required launch property', async() => {
+        test('It should catch missing required launch property', async () => {
             const response = await request(app)
                 .post('/v1/launches')
                 .send(launchDataWithoutDate)
@@ -74,7 +76,7 @@ describe('Launches API', () => {
                 error: 'Missing required launch property',
             })
         })
-        test('It should catch invalid launch date', async() => {
+        test('It should catch invalid launch date', async () => {
             const response = await request(app)
                 .post('/v1/launches')
                 .send(launchDataWithInvalidDate)
